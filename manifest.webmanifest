@@ -1,7 +1,7 @@
 {
-  "name": "دارك وولف — طلبات خامات الورش",
-  "short_name": "دارك وولف",
-  "description": "تطبيق طلبات خامات وإكسسوارات الورش من دارك وولف",
+  "name": "Darken Wolf — طلبات خامات الورش",
+  "short_name": "Darken Wolf",
+  "description": "تطبيق طلبات خامات وإكسسوارات الورش من Darken Wolf",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./index.html",

@@ -267,7 +267,7 @@
     var rows = payload.items.map(function (it, i) {
       return (i + 1) + ') ' + it.name + ' — ' + it.qty + ' ' + it.unit + ' × ' + egp(it.price) + ' = ' + egp(it.total);
     });
-    return ['طلب جديد — دارك وولف', 'الاسم: ' + payload.customer_name, 'التليفون: ' + payload.phone]
+    return ['طلب جديد — Darken Wolf', 'الاسم: ' + payload.customer_name, 'التليفون: ' + payload.phone]
       .concat(payload.notes ? ['ملاحظات: ' + payload.notes] : [])
       .concat([''].concat(rows))
       .concat(['الإجمالي: ' + egp(payload.total)]);
