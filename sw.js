@@ -1,5 +1,5 @@
 /* دارك وولف — service worker */
-var CACHE = 'dw-v6';
+var CACHE = 'dw-v7';
 var ASSETS = [
   './', 'index.html', 'styles.css', 'app.js', 'config.js', 'manifest.webmanifest',
   'icon-192.png', 'icon-512.png', 'icon-512-maskable.png',
@@ -8,7 +8,7 @@ var ASSETS = [
   'photo-lock.jpg', 'photo-epdm.jpg', 'photo-mesh.jpg', 'photo-upvc-handle.jpg'
 ];
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS.map(function (u) { return new Request(u, { cache: 'no-cache' }); })); }).then(function () { return self.skipWaiting(); }));
 });
 self.addEventListener('activate', function (e) {
   e.waitUntil(caches.keys().then(function (keys) {
@@ -18,7 +18,7 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
   var url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== self.location.origin) return;
-  if (url.origin === self.location.origin && /app\.js|index\.html|config\.js/.test(url.pathname)) {
+  if (url.origin === self.location.origin && /app\.js|index\.html|config\.js|styles\.css|manifest\.webmanifest/.test(url.pathname)) {
     e.respondWith(fetch(e.request).then(function (res) {
       var copy = res.clone();
       caches.open(CACHE).then(function (c) { c.put(e.request, copy); });
