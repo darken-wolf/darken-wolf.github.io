@@ -14,17 +14,49 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<!-- شاشة الدخول -->
+<section id="auth-screen" class="auth" hidden>
+  <img class="auth-icon" src="icon-192.png" alt="دارك وولف">
+  <h1 class="auth-name">دارك وولف</h1>
+  <p class="auth-sub">خامات وإكسسوارات للورش — دمياط</p>
+  <div class="auth-tabs">
+    <button id="tab-login" class="auth-tab active" type="button">تسجيل الدخول</button>
+    <button id="tab-signup" class="auth-tab" type="button">حساب جديد</button>
+  </div>
+  <form id="auth-form" class="auth-form" autocomplete="on">
+    <label class="field" id="f-name-wrap" hidden>الاسم
+      <input id="f-name" type="text" autocomplete="name">
+    </label>
+    <label class="field">البريد الإلكتروني
+      <input id="f-email" type="email" autocomplete="email" dir="ltr" required>
+    </label>
+    <label class="field">كلمة السر
+      <input id="f-password" type="password" autocomplete="current-password" dir="ltr" minlength="6" required>
+    </label>
+    <p id="auth-error" class="auth-error" hidden></p>
+    <button id="auth-submit" class="btn primary big" type="submit">دخول</button>
+  </form>
+</section>
+
+<!-- التطبيق -->
+<div id="app" hidden>
 <header class="brand">
   <img class="brand-icon" src="icon-192.png" alt="دارك وولف">
-  <div>
+  <div class="brand-titles">
     <div class="brand-name">دارك وولف</div>
-    <div class="brand-sub">خامات وإكسسوارات للورش</div>
+    <div class="brand-sub" id="brand-sub">خامات وإكسسوارات للورش</div>
+  </div>
+  <div class="user-chip">
+    <span id="user-name"></span>
+    <button id="admin-open" class="btn ghost small" type="button" hidden>الإدارة</button>
+    <button id="logout" class="btn ghost small" type="button">خروج</button>
   </div>
 </header>
 
-<main>
-  <p class="intro">اختار المنتجات والكميات، شوف الفاتورة والإجمالي، وابعت الطلب بضغطة واحدة.</p>
-  <div id="demo-note" class="note" hidden>نسخة تجريبية: الأسعار والمنتجات أمثلة للتجربة بس.</div>
+<main id="catalog-view">
+  <p class="intro" id="welcome-text">اختار المنتجات والكميات، شوف الفاتورة والإجمالي، وابعت الطلب بضغطة واحدة.</p>
+  <div id="demo-note" class="note" hidden></div>
 
   <nav class="filters" id="filters" aria-label="الأقسام"></nav>
 
@@ -36,7 +68,7 @@
     <div id="cart-body" hidden>
       <ul id="lines" class="lines"></ul>
       <div class="grand"><span>الإجمالي</span><strong id="grand-total"></strong></div>
-      <label class="field">اسم الورشة
+      <label class="field">الاسم / اسم الورشة
         <input id="f-workshop" type="text" autocomplete="organization">
       </label>
       <label class="field">رقم التليفون
@@ -47,14 +79,81 @@
       </label>
       <div class="actions">
         <button id="send-order" class="btn primary" type="button">إرسال الطلب</button>
-        <button id="copy-order" class="btn ghost" type="button">نسخ الطلب</button>
       </div>
       <p id="send-hint" class="hint"></p>
+    </div>
+    <div id="order-done" class="done" hidden>
+      <p class="done-title">تم استلام طلبك</p>
+      <p class="done-sub">رقم الطلب: <span id="order-id"></span></p>
+      <p class="done-sub">هيتم التواصل معاك لتأكيد الطلب والتسليم.</p>
+      <a id="wa-copy" class="btn ghost" href="#" target="_blank" rel="noopener">إرسال نسخة واتساب</a>
     </div>
   </section>
 </main>
 
-<footer class="foot">دارك وولف — دمياط</footer>
+<!-- شاشة الإدارة -->
+<main id="admin-view" hidden>
+  <div class="admin-head">
+    <h2>لوحة الإدارة</h2>
+    <button id="admin-close" class="btn ghost small" type="button">رجوع للمتجر</button>
+  </div>
+  <nav class="admin-tabs">
+    <button class="admin-tab active" data-tab="orders" type="button">الطلبات</button>
+    <button class="admin-tab" data-tab="products" type="button">المنتجات</button>
+    <button class="admin-tab" data-tab="texts" type="button">النصوص</button>
+  </nav>
+
+  <section id="admin-orders" class="admin-panel"></section>
+
+  <section id="admin-products" class="admin-panel" hidden>
+    <button id="product-add" class="btn primary" type="button">+ منتج جديد</button>
+    <div id="product-form" class="product-form" hidden>
+      <h3 id="product-form-title">منتج جديد</h3>
+      <input id="p-id" type="hidden">
+      <label class="field">الاسم <input id="p-name" type="text"></label>
+      <label class="field">السعر (ج) <input id="p-price" type="number" min="0" step="any" dir="ltr"></label>
+      <label class="field">الوحدة <input id="p-unit" type="text" placeholder="قطعة / متر / كجم"></label>
+      <label class="field">القسم
+        <select id="p-cat">
+          <option value="kitchen">إكسسوارات مطابخ</option>
+          <option value="aluminum">ألومنيوم وشبابيك</option>
+        </select>
+      </label>
+      <label class="field">الصورة
+        <select id="p-img"></select>
+      </label>
+      <label class="check"><input id="p-stock" type="checkbox" checked> متاح للبيع</label>
+      <div class="actions">
+        <button id="p-save" class="btn primary" type="button">حفظ</button>
+        <button id="p-cancel" class="btn ghost" type="button">إلغاء</button>
+      </div>
+    </div>
+    <div id="product-list"></div>
+  </section>
+
+  <section id="admin-texts" class="admin-panel" hidden>
+    <label class="field">رسالة الترحيب (أعلى الصفحة)
+      <textarea id="t-welcome" rows="2"></textarea>
+    </label>
+    <label class="field">وصف التطبيق (تحت الاسم)
+      <input id="t-description" type="text">
+    </label>
+    <label class="field">ملاحظة شريط التنبيه (اتركها فاضية لإخفائها)
+      <input id="t-note" type="text">
+    </label>
+    <label class="field">نص أسفل الصفحة
+      <input id="t-footer" type="text">
+    </label>
+    <div class="actions">
+      <button id="t-save" class="btn primary" type="button">حفظ النصوص</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" id="footer-text">دارك وولف — دمياط</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>
