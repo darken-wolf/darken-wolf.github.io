@@ -1,9 +1,9 @@
 :root {
-  --ink: #251f21;
+  --ink: #2b2b2b;
   --ink-2: #585254;
   --hairline: #eae9ea;
-  --teal: #73a89a;
-  --teal-dark: #4e8172;
+  --teal: #e85d2a;
+  --teal-dark: #c23c12;
   --page: #ffffff;
   --sand: #f4efec;
 }
@@ -165,7 +165,7 @@ main {
 .brand{display:flex;align-items:center;gap:10px}
 .brand-titles{flex:1}
 .user-chip{display:flex;align-items:center;gap:6px;font-size:13px;color:#cfc4c7}
-.user-chip .btn{background:transparent;color:#fff;border-color:#5a4d50}
+.user-chip .btn{background:transparent;color:#fff;border-color:#9c492a}
 .field{display:block;margin:10px 0;font-size:14px}
 .field input,.field select,.field textarea{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid #d8cfd2;border-radius:10px;font-size:15px;background:#fff}
 @media (max-width:560px){
