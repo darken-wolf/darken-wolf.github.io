@@ -185,6 +185,8 @@ main {
 .order-when{font-size:12px;color:#8a7f82}
 .order-phone{font-size:14px;margin:4px 0;text-align:left}
 .order-notes{font-size:13px;color:#6b6164;background:#f6f1f2;border-radius:8px;padding:6px 8px;margin:6px 0}
+.order-address{font-size:13px;color:#6b6164;background:#fdf3ec;border:1px solid #f3ddcb;border-radius:8px;padding:6px 8px;margin:6px 0;white-space:pre-line}
+.admin-badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:9px;background:#d03010;color:#fff;font-size:12px;font-weight:700;text-align:center;margin-inline-start:6px;padding:0 4px}
 .order-items{margin:8px 0;padding-right:18px;font-size:14px}
 .order-foot{display:flex;justify-content:space-between;align-items:center}
 .product-row{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e6dedf;border-radius:12px;padding:10px;margin-bottom:8px;flex-wrap:wrap}

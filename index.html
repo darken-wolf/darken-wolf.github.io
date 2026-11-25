@@ -49,7 +49,7 @@
   </div>
   <div class="user-chip">
     <span id="user-name"></span>
-    <button id="admin-open" class="btn ghost small" type="button" hidden>الإدارة</button>
+    <button id="admin-open" class="btn ghost small" type="button" hidden>الإدارة<span id="admin-badge" class="admin-badge" hidden></span></button>
     <button id="logout" class="btn ghost small" type="button">خروج</button>
   </div>
 </header>
@@ -71,8 +71,17 @@
       <label class="field">الاسم / اسم الورشة
         <input id="f-workshop" type="text" autocomplete="organization">
       </label>
-      <label class="field">رقم التليفون
-        <input id="f-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr">
+      <label class="field">رقم الموبايل (للتواصل معاك)
+        <input id="f-phone" type="tel" inputmode="tel" autocomplete="off" dir="ltr" required placeholder="01xxxxxxxxx">
+      </label>
+      <label class="field">المدينة / المنطقة
+        <input id="f-city" type="text" autocomplete="off" required placeholder="مثال: دمياط - المنصورة">
+      </label>
+      <label class="field">عنوان التوصيل بالتفصيل (الشارع، العمارة، الدور)
+        <textarea id="f-address" rows="2" required></textarea>
+      </label>
+      <label class="field">علامة مميزة (اختياري)
+        <input id="f-landmark" type="text" autocomplete="off" placeholder="مثال: جنب مسجد...">
       </label>
       <label class="field">ملاحظات (اختياري)
         <textarea id="f-notes" rows="2"></textarea>
@@ -85,8 +94,7 @@
     <div id="order-done" class="done" hidden>
       <p class="done-title">تم استلام طلبك</p>
       <p class="done-sub">رقم الطلب: <span id="order-id"></span></p>
-      <p class="done-sub">هيتم التواصل معاك لتأكيد الطلب والتسليم.</p>
-      <a id="wa-copy" class="btn ghost" href="#" target="_blank" rel="noopener">إرسال نسخة واتساب</a>
+      <p class="done-sub">هيتم التواصل معاك على رقمك لتأكيد الطلب والتسليم.</p>
     </div>
   </section>
 </main>

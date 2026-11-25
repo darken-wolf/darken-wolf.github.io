@@ -253,9 +253,15 @@
   }
   function orderPayload() {
     var ls = lines();
+    var city = $('f-city').value.trim();
+    var addr = $('f-address').value.trim();
+    var landmark = $('f-landmark').value.trim();
+    var address = city + ' — ' + addr + (landmark ? ' (علامة مميزة: ' + landmark + ')' : '');
     return {
       customer_name: $('f-workshop').value.trim(),
-      phone: $('f-phone').value.trim(),
+      phone: $('f-phone').value.replace(/[^0-9]/g, ''),
+      city: city,
+      address: address,
       notes: $('f-notes').value.trim(),
       items: ls.map(function (l) {
         return { name: l.p.name, qty: l.qty, unit: l.p.unit, price: l.p.price, total: l.total };
@@ -263,20 +269,13 @@
       total: ls.reduce(function (s, l) { return s + l.total; }, 0)
     };
   }
-  function orderText(payload) {
-    var rows = payload.items.map(function (it, i) {
-      return (i + 1) + ') ' + it.name + ' — ' + it.qty + ' ' + it.unit + ' × ' + egp(it.price) + ' = ' + egp(it.total);
-    });
-    return ['طلب جديد — Darken Wolf', 'الاسم: ' + payload.customer_name, 'التليفون: ' + payload.phone]
-      .concat(payload.notes ? ['ملاحظات: ' + payload.notes] : [])
-      .concat([''].concat(rows))
-      .concat(['الإجمالي: ' + egp(payload.total)]);
-  }
   function sendOrder() {
     var payload = orderPayload();
     var hint = $('send-hint');
     if (!payload.customer_name) { hint.textContent = 'اكتب الاسم الأول.'; return; }
-    if (!payload.phone) { hint.textContent = 'اكتب رقم التليفون الأول.'; return; }
+    if (!/^01[0-9]{9}$/.test(payload.phone)) { hint.textContent = 'اكتب رقم موبايل صح: 11 رقم يبدأ بـ 01.'; return; }
+    if (!payload.city) { hint.textContent = 'اكتب المدينة / المنطقة.'; return; }
+    if (!$('f-address').value.trim()) { hint.textContent = 'اكتب عنوان التوصيل بالتفصيل.'; return; }
     hint.textContent = '';
     var btn = $('send-order');
     btn.disabled = true;
@@ -284,6 +283,7 @@
     sb.from('orders').insert({
       customer_name: payload.customer_name,
       phone: payload.phone,
+      address: payload.address,
       notes: payload.notes || null,
       items: payload.items,
       total: payload.total
@@ -301,8 +301,6 @@
         $('cart-empty').hidden = true;
         $('order-done').hidden = false;
         $('order-id').textContent = id;
-        $('wa-copy').href = 'https://wa.me/' + (CFG.whatsappNumber || '') +
-          '?text=' + encodeURIComponent(orderText(payload).join('\n'));
         toast('اتبعت الطلب');
       })
       .catch(function () {
@@ -338,6 +336,7 @@
   }
 
   function renderAdminOrders() {
+    refreshOrderBadge();
     var box = $('admin-orders');
     box.innerHTML = '<p class="empty">بيتم التحميل…</p>';
     sb.from('orders').select('*').order('created_at', { ascending: false }).limit(100)
@@ -357,6 +356,7 @@
             '<div class="order-top"><strong>' + esc(o.customer_name) + '</strong>' +
             '<span class="order-when">' + when + '</span></div>' +
             '<div class="order-phone" dir="ltr">' + esc(o.phone) + '</div>' +
+            (o.address ? '<div class="order-address">' + esc(o.address) + '</div>' : '') +
             (o.notes ? '<div class="order-notes">' + esc(o.notes) + '</div>' : '') +
             '<ul class="order-items">' + items + '</ul>' +
             '<div class="order-foot"><strong>' + egp(o.total) + '</strong>' +
@@ -496,6 +496,18 @@
     loadProducts();
     renderFilters();
     renderCart();
+    refreshOrderBadge();
+  }
+  function refreshOrderBadge() {
+    var badge = $('admin-badge');
+    if (!state.isOwner) { badge.hidden = true; return; }
+    sb.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'new')
+      .then(function (r) {
+        var n = r.count || 0;
+        badge.textContent = n;
+        badge.hidden = !n;
+      })
+      .catch(function () {});
   }
   function bind() {
     bindAuth();
@@ -514,10 +526,7 @@
     $('t-save').addEventListener('click', saveTexts);
     var w = $('f-workshop');
     w.addEventListener('input', function () { save('dw-workshop', w.value); });
-    var ph = $('f-phone');
-    ph.addEventListener('input', function () { save('dw-phone', ph.value); });
     w.value = load('dw-workshop', '');
-    ph.value = load('dw-phone', '');
     fillImageOptions();
   }
 
