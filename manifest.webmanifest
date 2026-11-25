@@ -1,0 +1,17 @@
+{
+  "name": "دارك وولف — طلبات خامات الورش",
+  "short_name": "دارك وولف",
+  "description": "تطبيق طلبات خامات وإكسسوارات الورش من دارك وولف",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4efec",
+  "theme_color": "#251f21",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
